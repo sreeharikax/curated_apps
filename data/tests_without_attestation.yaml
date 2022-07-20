@@ -1,0 +1,13 @@
+---
+Default:
+  signing_key: n
+  attestation: n
+  runtime_variables: n
+
+test_redis_with_attestation:
+  workload_option: 1
+  base_image: redis
+
+test_pytorch_with_attestation:
+  workload_option: 2
+  base_image: inteltestuser94/pytorch-plain1

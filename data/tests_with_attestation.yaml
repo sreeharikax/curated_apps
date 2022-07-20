@@ -1,0 +1,19 @@
+---
+Default:
+  signing_key: n
+  attestation: y
+  cert_file: n
+  cert_file_path: verifier_image/ca.crt
+  runtime_variables: n
+
+test_redis_with_attestation:
+  workload_option: 1
+  base_image: redis
+
+test_pytorch_with_attestation:
+  workload_option: 2
+  base_image: inteltestuser94/pytorch-encrypted
+  encrypted_files: classes.txt;input.jpg;alexnet-pretrained.pt;app/result.txt
+
+
+  

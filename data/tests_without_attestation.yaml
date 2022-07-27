@@ -1,13 +1,22 @@
 ---
-Default:
-  signing_key: n
+default_input_args:
   attestation: n
   runtime_variables: n
+  signing_key_path :
 
-test_redis_with_attestation:
-  workload_option: 1
-  base_image: redis
+test_redis:
+  docker_image: redis/redis:7.0.0
 
-test_pytorch_with_attestation:
-  workload_option: 2
-  base_image: inteltestuser94/pytorch-plain1
+test_redis_with_sign_key:
+  docker_image: redis/redis:7.0.0
+  input_args:
+    signing_key_path :
+
+test_redis_with_runtime_variables:
+  docker_image: redis/redis:7.0.0
+  input_args:
+    signing_key_path:
+    runtime_variables: y
+    runtime_variable_list: name="curator_app",version="1.2"
+
+

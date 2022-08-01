@@ -17,6 +17,15 @@ def read_config_yaml(config_file_path, test_name):
         test_config.update(test_items)
     return test_config
 
+def get_inputs_from_dict(test_config_dict):
+    input_str = ''
+    for key, value in test_config_dict.items():
+        if value:
+            input_str += str(value).strip() + "\n"
+        else:
+            input_str += "\n"
+    return input_str
+
 def create_input_file(input_str):
     with open(CURATED_APPS_PATH + "/input.txt", mode="w") as f:
         f.write(input_str)
@@ -61,4 +70,4 @@ def run_test(test_instance, test_yaml_file):
     input_str = get_inputs_from_dict(sorted_dict)
     #print(input_str)
     create_input_file(input_str)
-    return run_curated_app(docker_base_os)
+    return run_curated_app(docker_base_os, run_with_test_option)

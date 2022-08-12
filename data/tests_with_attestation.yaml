@@ -134,11 +134,6 @@ test_pytorch_with_attestation_invalid_encryption_key:
   ssl_path: test_config/ssl
   expected_output_console: "`gsc-pytorch-encrypted:latestx` creation failed"
 
-test_redis_with_attestation_client_conn:
-  docker_image: redis/redis:latest
-  cert_file: y
-  client: y
-
 test_redis_with_attestation_verifier_kill:
   docker_image: redis/redis:latest
   cert_file: y

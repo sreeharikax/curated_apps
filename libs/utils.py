@@ -6,6 +6,7 @@ import libs.config_parser as config_parser
 from torchvision import models
 import torch
 from data.constants import *
+import re
 
 def run_subprocess(command, dest_dir=None):
     if dest_dir:
@@ -56,9 +57,9 @@ def cleanup_after_test(workload):
         kill_process_by_name("/gramine/app_files/entrypoint")
         kill_process_by_name("/gramine/meson_build_output/lib/x86_64-linux-gnu/gramine/sgx/loader")
         run_subprocess('sudo sh -c "echo 3 > /proc/sys/vm/drop_caches"')
-        run_subprocess("docker rmi gsc-{}x -f".format(workload))
-        run_subprocess("docker rmi gsc-{}x-unsigned -f".format(workload))
-        run_subprocess("docker rmi {}x -f".format(workload))
+        run_subprocess("docker rmi gsc-{} -f".format(workload))
+        run_subprocess("docker rmi gsc-{}-unsigned -f".format(workload))
+        run_subprocess("docker rmi {} -f".format(workload.replace(":", "_x:")))
         run_subprocess("docker rmi verifier_image:latest -f")
         if run_subprocess("docker ps -a -q"):
             run_subprocess("docker rm -f $(docker ps -a -q)")
@@ -90,12 +91,12 @@ def check_machine():
         print("No Provisioning service found, cannot run tests with attestation.")
         return "No Provisioning enabled"
 
-def generate_encrypted_files(path, filename):
-    output_path = os.path.join(path, "alexnet-pretrained.pt")
-    encrypt_cmd = "gramine-sgx-pf-crypt encrypt -w wrap-key -i {} -o {}".format(filename, output_path)
-    run_subprocess(encrypt_cmd, path)
-    dest_path = os.path.join(path, "encrypted")
-    move_cmd = "mv %s %s" % output_path, dest_path
+def generate_encrypted_files(filename):
+    encrypt_cmd = "gramine-sgx-pf-crypt encrypt -w wrap-key -i {} -o {}".format(filename, PYTORCH_MODEL)
+    run_subprocess(encrypt_cmd, PYTORCH_ENCRYPTED_PATH)
+    dest_path = os.path.join(PYTORCH_ENCRYPTED_PATH, "encrypted")
+    output_path = os.path.join(PYTORCH_ENCRYPTED_PATH, PYTORCH_MODEL)
+    move_cmd = "mv %s %s" %(output_path, dest_path)
     run_subprocess(move_cmd)
 
 def create_docker_image(docker_path, docker_name):
@@ -104,15 +105,15 @@ def create_docker_image(docker_path, docker_name):
     output = run_subprocess(docker_build_cmd, docker_path)
     print(output)
 
-def generate_local_image(workload_image, encryption=None):
+def generate_local_image(workload_image, encryption):
     if "pytorch" in workload_image:
-        output_filename = PYTORCH_PLAIN_PATH + "/plaintext/alexnet-pretrained.pt"
+        output_filename = os.path.join(PYTORCH_PLAIN_PATH, "plaintext", PYTORCH_MODEL)
         alexnet = models.alexnet(pretrained=True)
         torch.save(alexnet, output_filename)
         print("Pre-trained model is saved in \"%s\"" % output_filename)
 
-        if encryption == "y":
-            generate_encrypted_files(PYTORCH_ENCRYPTED_PATH, output_filename)
+        if encryption:
+            generate_encrypted_files(output_filename)
             create_docker_image(PYTORCH_ENCRYPTED_PATH, PYTORCH_ENCRYPTION)
         else:
             create_docker_image(PYTORCH_PLAIN_PATH, PYTORCH_PLAIN)
@@ -120,6 +121,7 @@ def generate_local_image(workload_image, encryption=None):
         create_docker_image(BASH_PATH, BASH_TEST)
 
 def test_setup(test_config_dict):
+    encryption = False
     if test_config_dict.get("test_option") == None:
         workload_image = test_config_dict["docker_image"]
         sorted_dict = config_parser.data_pre_processing(test_config_dict)
@@ -127,6 +129,18 @@ def test_setup(test_config_dict):
         config_parser.create_input_file(input_str)
 
         if test_config_dict.get("create_local_image") == "y":
-            generate_local_image(workload_image, test_config_dict.get("encrypted_files"))
+            if test_config_dict["docker_image"] == "pytorch/pytorch-encryption:latest":
+                encryption = True
+            generate_local_image(workload_image, encryption)
     else:
-        config_parser.create_input_file(b'\x07')
+        config_parser.create_input_file(b'\x07') 
+    return encryption
+
+def update_file_contents(old_contents, new_contents, filename):
+    fd = open(filename)
+    fd_contents = fd.read()
+    fd.close()
+    new_data = re.sub(old_contents, new_contents, fd_contents)
+    fd = open(filename, "w")
+    fd.write(new_data)
+    fd.close()

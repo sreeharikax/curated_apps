@@ -60,7 +60,7 @@ def cleanup_after_test(workload):
         run_subprocess("docker rmi gsc-{} -f".format(workload))
         run_subprocess("docker rmi gsc-{}-unsigned -f".format(workload))
         run_subprocess("docker rmi {} -f".format(workload.replace(":", "_x:")))
-        run_subprocess("docker rmi verifier_image:latest -f")
+        run_subprocess("docker rmi verifier:latest -f")
         if run_subprocess("docker ps -a -q"):
             run_subprocess("docker rm -f $(docker ps -a -q)")
         if run_subprocess("docker volume ls -q"):

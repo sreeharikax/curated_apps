@@ -4,6 +4,7 @@ import os
 import shutil
 from data.constants import *
 from libs import utils
+import re
 
 def read_config_yaml(config_file_path, test_name):
     yaml_file = open(config_file_path, "r")
@@ -66,3 +67,7 @@ def data_pre_processing_for_verifier_image(test_config_dict, end_test_key_str):
             shutil.copytree(test_config_dict["ssl_path"], VERIFIER_SERVICE_PATH + "/ssl")
     if "bash/bash" in test_config_dict['docker_image']:
         shutil.copytree("data/bash", CURATED_APPS_PATH + "/bash")
+        if utils.check_machine() == "Azure Linux Agent":
+            utils.update_file_contents(ENV_PROXY_STRING, '', BASH_DOCKERFILE)
+            utils.update_file_contents(ENV_PROXY_STRING, '', BASH_GSC_DOCKERFILE)
+   

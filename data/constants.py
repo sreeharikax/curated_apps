@@ -16,4 +16,11 @@ PYTORCH_ENCRYPTION     = "pytorch-encryption"
 PYTORCH_PLAIN          = "pytorch-plain"
 BASH_TEST              = "bash-test"
 SCREEN_LIST            = ["home_page", "signing_page", "attestation_page", "verifier_page", "runtime_page", "environment_page",
-                          "encrypted_page", "final_page"]
+                          "encrypted_page", "encryption_key_page", "final_page"]
+PYTORCH_MODEL          = "alexnet-pretrained.pt"
+BASH_DOCKERFILE        = os.path.join(CURATED_APPS_PATH, "bash", "Dockerfile")
+BASH_GSC_DOCKERFILE    = os.path.join(CURATED_APPS_PATH, "bash", "bash-gsc.dockerfile")
+ENV_PROXY_STRING       = 'ENV http_proxy "http://proxy-dmz.intel.com:911"\nENV https_proxy "http://proxy-dmz.intel.com:912"\n'
+AZURE_DCAP             = "(.*)RUN wget https:\/\/packages.microsoft(.*)\n(.*)amd64.deb"
+GRAMINE_INSTALL        = "RUN apt-get install -y gramine-dcap"
+DCAP_LIBRARY           = "\nRUN apt install -y libsgx-dcap-default-qpl libsgx-dcap-default-qpl-dev\nCOPY sgx_default_qcnl.conf  /etc/sgx_default_qcnl.conf"

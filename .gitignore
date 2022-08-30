@@ -1,6 +1,7 @@
 .cache
 /build
 /install
+logs
 *contrib_repo
 
 # No editor backup files.

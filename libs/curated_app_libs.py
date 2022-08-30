@@ -85,7 +85,7 @@ def get_docker_run_command(attestation, workload_name, encryption=None):
         mnt_cmd = "-v {}:/ra-tls-secret-prov/ssl".format(ssl_path)
         if encryption:
             mnt_cmd +=  " -v {}:/keys".format(PYTORCH_ENCRYPTED_PATH)
-        verifier_cmd  = "docker run --rm --net=host -e RA_TLS_ALLOW_DEBUG_ENCLAVE_INSECURE=1 -e RA_TLS_ALLOW_OUTDATED_TCB_INSECURE=1 {} --device=/dev/sgx/enclave  -t verifier_image:latest".format(mnt_cmd)
+        verifier_cmd  = "docker run --rm --net=host -e RA_TLS_ALLOW_DEBUG_ENCLAVE_INSECURE=1 -e RA_TLS_ALLOW_OUTDATED_TCB_INSECURE=1 {} --device=/dev/sgx/enclave  -t verifier:latest".format(mnt_cmd)
         gsc_workload = "docker run --rm --net=host --device=/dev/sgx/enclave -e SECRET_PROVISION_SERVERS=\"localhost:4433\" \
             -v /var/run/aesmd/aesm.socket:/var/run/aesmd/aesm.socket -t {}".format(wrapper_image)
         output.append(verifier_cmd)

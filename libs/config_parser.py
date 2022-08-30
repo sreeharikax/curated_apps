@@ -60,7 +60,7 @@ def data_pre_processing(test_config_dict):
 
 def data_pre_processing_for_verifier_image(test_config_dict, end_test_key_str):
     if test_config_dict["attestation"] == "done" and end_test_key_str != "attestation":
-            # copy the verifier_image ssl folder
+            # copy the verifier ssl folder
         if os.path.isdir(VERIFIER_SERVICE_PATH + "/ssl"):
             shutil.rmtree(VERIFIER_SERVICE_PATH + "/ssl")
         if test_config_dict['ssl_path']:

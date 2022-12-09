@@ -96,7 +96,7 @@ def create_docker_image(docker_path, docker_name):
 
 def generate_local_image(workload_image):
     if "pytorch" in workload_image:
-        output = run_subprocess(PYTORCH_HELPER_CMD, PYTORCH_HELPER_PATH)
+        output = run_subprocess(PYTORCH_HELPER_CMD, CURATED_APPS_PATH)
         print(output)
     elif "bash" in workload_image:
         image_name = workload_image.split(":")[0].split(" ")[1]
@@ -104,7 +104,7 @@ def generate_local_image(workload_image):
     elif "redis" in workload_image:
         run_subprocess("docker pull redis:7.0.0")
     elif "sklearn" in workload_image:
-        output = run_subprocess(SKLEARN_HELPER_CMD, SKLEARN_HELPER_PATH)
+        output = run_subprocess(SKLEARN_HELPER_CMD, CURATED_APPS_PATH)
         print(output)
 
 def local_image_setup(test_config_dict):

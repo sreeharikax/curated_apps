@@ -29,7 +29,7 @@ def runtest(){
             # sudo python3 -m pytest -v -s $test_cmd $tests_to_execute
             ssh -tt intel@localhost "cd $WORKSPACE; gramine_commit=$gramine_commit \
                 gsc_commit=$gsc_commit contrib_repo=$contrib_repo contrib_branch=$contrib_branch \
-                python3 -m pytest -v -s $test_cmd '$tests_to_execute'"
+                python3 -m pytest -v -s $test_cmd '$tests_to_execute' --junit-xml=result.xml"
         """
     }
 }
@@ -39,6 +39,8 @@ def storeartifacts(){
         dir('logs') {
             archiveArtifacts artifacts: '**'
         }
+        archiveArtifacts 'result.xml'
+        junit 'result.xml'
     }
 }
 

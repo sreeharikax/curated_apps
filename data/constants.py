@@ -24,7 +24,7 @@ PYTORCH_HELPER_CMD     = f"bash {PYTORCH_HELPER_PATH}/helper.sh"
 SKLEARN_HELPER_PATH    = os.path.join(WORKLOADS_PATH, "sklearn", "base_image_helper")
 SKLEARN_HELPER_CMD     = f"bash {SKLEARN_HELPER_PATH}/helper.sh"
 BASH_PATH              = os.path.join(WORKLOADS_PATH, "bash")
-SCREEN_LIST            = ["home_page", "distro_page", "runtime_page", "environment_page", "encrypted_page", "encryption_key_page",
+SCREEN_LIST            = ["home_page", "distro_page", "runtime_page", "environment_page", "flags_page", "encrypted_page", "encryption_key_page",
                             "attestation_page", "signing_page", "signing_key_password", "verifier_page", "final_page"]
 BASH_DOCKERFILE        = os.path.join(WORKLOADS_PATH, "bash", "Dockerfile")
 BASH_GSC_DOCKERFILE    = os.path.join(WORKLOADS_PATH, "bash", "bash-gsc.dockerfile.template")
@@ -32,9 +32,9 @@ ENV_PROXY_STRING       = 'ENV http_proxy "http://proxy-dmz.intel.com:911"\nENV h
 AZURE_DCAP             = "(.*)RUN wget https:\/\/packages.microsoft(.*)\n(.*)amd64.deb"
 GRAMINE_INSTALL        = "RUN apt-get install -y gramine-dcap"
 DCAP_LIBRARY           = "\nRUN apt install -y libsgx-dcap-default-qpl libsgx-dcap-default-qpl-dev\nCOPY sgx_default_qcnl.conf  /etc/sgx_default_qcnl.conf\n"
-DCAP_ORD_LIST          = ['start', 'azure_warning', 'distro', 'runtime_args_text', 'runtime_variable_list', 'encrypted_files_path', 'encryption_key', 
+DCAP_ORD_LIST          = ['start', 'azure_warning', 'distro', 'runtime_args_text', 'runtime_variable_list', 'docker_flags', 'encrypted_files_path', 'encryption_key', 
                             'attestation', 'signing_key_path', 'signing_key_password', 'end']
-AZURE_ORD_LIST         = ['start', 'distro', 'runtime_args_text', 'runtime_variable_list', 'encrypted_files_path', 'encryption_key', 
+AZURE_ORD_LIST         = ['start', 'distro', 'runtime_args_text', 'runtime_variable_list', 'docker_flags', 'encrypted_files_path', 'encryption_key', 
                             'attestation', 'signing_key_path', 'signing_key_password', 'end']
 UBUNTU_18_04           = "From ubuntu:18.04"
 UBUNTU_20_04           = "From ubuntu:20.04"

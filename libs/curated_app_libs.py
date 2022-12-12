@@ -39,6 +39,8 @@ def screen_verification(output):
         return "verifier_page"
     elif "Specify docker command-line arguments here in a single" in output:
         return "runtime_page"
+    elif "Specify docker run flags here in a single string" in output:
+        return "flags_page"
     elif "Please specify a list of env variables" in output:
         return "environment_page"
     elif "Encrypted files in the base image used by the" in output:

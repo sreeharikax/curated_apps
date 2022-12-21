@@ -3,13 +3,13 @@ import os
 from data.constants import *
 from libs import utils
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="session", autouse=True)
 def curated_setup():
     print_env_variables()
     utils.run_subprocess(f"rm -rf {LOGS}")
     os.mkdir(LOGS)
+    utils.run_subprocess("docker system prune -f")
     print("Cleaning old contrib repo")
-    utils.run_subprocess("rm -rf {}".format(REPO_PATH))
     utils.run_subprocess("rm -rf {}".format(ORIG_CURATED_PATH))
     print("Cloning and checking out Contrib Git Repo")
     utils.run_subprocess(CONTRIB_GIT_CMD)
@@ -18,8 +18,6 @@ def curated_setup():
     if os.environ["SETUP_MACHINE"] == "DCAP client":
         print("Configuring the contrib repo to setup DCAP client")
         dcap_setup()
-    elif os.environ["SETUP_MACHINE"] == "Azure Linux Agent":
-        azure_setup()
     update_env_variables()
 
 def update_env_variables():
@@ -41,7 +39,7 @@ def print_env_variables():
     print("Contrib Commit: ", os.environ.get("contrib_branch", ""))
     print("############################################################################\n\n")
 
-@pytest.fixture()
+@pytest.fixture(scope="function", autouse=True)
 def copy_repo():
     utils.run_subprocess("rm -rf {}".format(REPO_PATH))
     utils.run_subprocess("cp -rf {} {}".format(ORIG_CURATED_PATH, REPO_PATH))
@@ -53,11 +51,6 @@ def dcap_setup():
     utils.update_file_contents(GRAMINE_INSTALL, GRAMINE_INSTALL+DCAP_LIBRARY, VERIFIER_DOCKERFILE)
     # utils.update_file_contents('sgx.enclave_size = "8G"', 'sgx.enclave_size = "4G"', 
     #             os.path.join(ORIG_CURATED_PATH, CURATED_PATH, "workloads/pytorch", "pytorch.manifest.template"))
-
-def azure_setup():
-    utils.update_file_contents('sgx.enclave_size = "64G"', 'sgx.enclave_size = "16G"',
-        os.path.join(ORIG_BASE_PATH, "workloads/tensorflow-serving",
-        "tensorflow-serving.manifest.template"))
 
 def update_gramine_branch(commit):
     commit_str = f" && cd gramine && git checkout {commit} && cd .."
@@ -81,3 +74,8 @@ def update_gsc(gsc_commit='', gsc_repo=''):
         utils.update_file_contents(GSC_CLONE, repo_str, curation_script)
     elif gsc_commit:
         utils.update_file_contents(GSC_CLONE, GSC_CLONE.replace(DEPTH_STR, "") + checkout_str, curation_script)
+
+@pytest.fixture(scope="class", autouse=True)
+def teardown():
+    yield
+    utils.run_subprocess("docker system prune -f")

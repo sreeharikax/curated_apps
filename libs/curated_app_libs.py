@@ -139,11 +139,26 @@ def expected_msg_verification(test_config_dict, curation_output):
         return result
     return None
 
-def verify_process(process, workload_result, verifier_process=None):
+def verify_process(test_config_dict, process=None, verifier_process=None):
     result = False
+    debug_log = None
+    if verifier_process and test_config_dict.get("verifier_error"):
+        workload_result = test_config_dict.get("verifier_error")
+    else:
+        workload_result = get_workload_result(test_config_dict)
+
+    # Redirecting the debug mode logs to file instead of console because
+    # it consumes whole lot of console and makes difficult to debug
+    if test_config_dict.get("debug_mode") == "y":
+        debug_log_file = test_config_dict["log_file"].replace(".log", "_console.log")
+        debug_log = open(debug_log_file, "w+")
+
     while True:
         nextline = process.stdout.readline()
-        print(nextline.strip())
+        if debug_log:
+            debug_log.write(nextline.strip())
+        else:
+            print(nextline.strip())
         if nextline == '' and process.poll() is not None:
             break
         if all(x in nextline for x in workload_result):
@@ -153,6 +168,8 @@ def verify_process(process, workload_result, verifier_process=None):
             sys.stdout.flush()
             result = True
             break
+
+    if debug_log: debug_log.close()
     return result
 
 def run_verifier_process(test_config_dict, verifier_cmd):
@@ -163,14 +180,13 @@ def run_verifier_process(test_config_dict, verifier_cmd):
     verifier_process = utils.popen_subprocess(verifier_cmd)
     time.sleep(20)
     if error_msg:
-        return verify_process(verifier_process, [error_msg])
+        return verify_process(test_config_dict, verifier_process=verifier_process)
     return verifier_process
 
 def run_curated_image(test_config_dict, curation_output):
     verifier_process = None
     unsigned_image = False
     attestation = True if test_config_dict["attestation"] in ["test", "done"] else False
-    workload_result = get_workload_result(test_config_dict)
 
     docker_command = get_docker_run_command(test_config_dict, curation_output)
     ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
@@ -181,7 +197,7 @@ def run_curated_image(test_config_dict, curation_output):
             if type(verifier_process) == bool:
                 return verifier_process
     process = utils.popen_subprocess(gsc_docker_command)
-    return verify_process(process, workload_result, verifier_process)
+    return verify_process(test_config_dict, process, verifier_process)
 
 def verify_run(curation_output):
     if re.search("The curated GSC image gsc-(.*)ready", curation_output, re.DOTALL) or \

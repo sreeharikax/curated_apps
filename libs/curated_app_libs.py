@@ -156,7 +156,7 @@ def verify_process(test_config_dict, process=None, verifier_process=None):
     while True:
         nextline = process.stdout.readline()
         if debug_log:
-            debug_log.write(nextline.strip())
+            debug_log.write(nextline)
         else:
             print(nextline.strip())
         if nextline == '' and process.poll() is not None:

@@ -49,20 +49,27 @@ def kill_process_by_name(processName):
         except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
             pass
 
+def stop_docker_process(keyword):
+    container_id = run_subprocess(f"docker container ls  | grep {keyword}" +" | awk '{print $1}'")
+    if container_id:
+        try:
+            run_subprocess("docker stop {}".format(container_id))
+        except Exception as e:
+            pass
+
 def cleanup_after_test(test_config_dict):
     try:
         docker_image = test_config_dict['docker_image'].split(" ")[1]
         copy_cmd = "mv {} {}.txt >/dev/null 2>&1".format(test_config_dict["curation_log"], 
                                     os.path.join(LOGS, test_config_dict["test_name"]))
         run_subprocess(copy_cmd)
-        verifier_id = run_subprocess("docker container ls  | grep 'verifier:latest' | awk '{print $1}'")
-        if verifier_id: run_subprocess("docker stop {}".format(verifier_id))
-        workload_id = run_subprocess("docker container ls  | grep 'gramine' | awk '{print $1}'")
-        if workload_id: run_subprocess("docker stop {}".format(workload_id))
+        stop_docker_process("verifier:latest")
+        stop_docker_process("gramine")
         run_subprocess("docker rmi verifier:latest -f")
         run_subprocess(f"docker rmi gsc-{docker_image} -f")
         if test_config_dict.get("create_local_image") == "y":
             run_subprocess(f"docker rmi {docker_image} -f >/dev/null 2>&1")
+        run_subprocess("docker rm $(docker ps -a -f status=exited -f status=created -q)")
     except Exception as e:
         print("Exception occured during cleanup ", e)
 

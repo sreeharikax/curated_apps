@@ -144,6 +144,8 @@ def verify_process(test_config_dict, process=None, verifier_process=None):
     debug_log = None
     if verifier_process and test_config_dict.get("verifier_error"):
         workload_result = test_config_dict.get("verifier_error")
+        process = verifier_process
+        verifier_process = None
     else:
         workload_result = get_workload_result(test_config_dict)
 

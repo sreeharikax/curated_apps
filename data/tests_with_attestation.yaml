@@ -174,3 +174,11 @@ test_tfserving_with_test_attestation_ubuntu20_04:
   create_local_image: y
   runtime_args_text: --model_name="resnet" --model_base_path="/models/resnet"
   distro: 2
+
+test_pytorch_default_with_debug:
+  docker_image: pytorch pytorch-encrypted:latest
+  create_local_image: y
+  debug_mode: y
+  encryption_key: workloads/pytorch/base_image_helper/encryption_key
+  encrypted_files_path: classes.txt:input.jpg:alexnet-pretrained.pt:result.txt
+  distro: 1

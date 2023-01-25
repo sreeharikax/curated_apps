@@ -20,8 +20,6 @@ def curated_setup():
     if os.environ["SETUP_MACHINE"] == "DCAP client":
         print("Configuring the contrib repo to setup DCAP client")
         dcap_setup()
-    elif os.environ["SETUP_MACHINE"] == "Azure Linux Agent" and os.environ["gramine_commit"]:
-        utils.update_file_contents("gramine.git", "RUN apt-get install -y libsgx-dcap-quote-verify-dev\n", VERIFIER_DOCKERFILE, True)
 
 def update_env_variables():
     if os.environ["gramine_commit"]:

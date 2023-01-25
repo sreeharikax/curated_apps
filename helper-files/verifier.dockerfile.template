@@ -41,6 +41,7 @@ RUN echo 'deb [arch=amd64] https://download.01.org/intel-sgx/sgx_repo/ubuntu bio
     && apt-key add intel-sgx-deb.key
 
 RUN apt-get update
+RUN apt-get install -y libsgx-dcap-quote-verify-dev
 
 RUN git clone --depth 1 --branch v1.3.1 https://github.com/gramineproject/gramine.git
 

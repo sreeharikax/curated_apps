@@ -63,6 +63,10 @@ def cleanup_after_test(test_config_dict):
         copy_cmd = "mv {} {}.txt >/dev/null 2>&1".format(test_config_dict["curation_log"], 
                                     os.path.join(LOGS, test_config_dict["test_name"]))
         run_subprocess(copy_cmd)
+        if test_config_dict["attestation"]:
+            verifier_cmd = "mv {} {} >/dev/null 2>&1".format(os.path.join(CURATED_APPS_PATH,"verifier/verifier.log"),
+            os.path.join(LOGS, f'{test_config_dict["test_name"]}_verifier.log'))
+            run_subprocess(verifier_cmd)
         stop_docker_process("verifier:latest")
         stop_docker_process("gramine")
         run_subprocess("docker rmi verifier:latest -f")

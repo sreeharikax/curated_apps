@@ -12,6 +12,7 @@ graphene_dcap [attestation test]
 graphene_wcity_02 [non attestation test]''', name: 'nodeLabel')])])
 
 node("$nodeLabel") {
+    env.TERM="linux"
     checkout scm
     test_executor = load 'ci/libs/utils.pipeline'
 

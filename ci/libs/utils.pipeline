@@ -24,10 +24,10 @@ def runtest(){
         sh """
             # sudo python3 -m pytest -v -s -k '$tests_to_execute' --junit-xml libos-regression.xml
             # curses doesnt recognise Jenkins terminal. Hence ssh to local machine with pseudo-terminal allocation
-            # ssh -tt intel@localhost "cd $WORKSPACE; $test_cmd '$tests_to_execute'"
+            # ssh -tt $USER@localhost "cd $WORKSPACE; $test_cmd '$tests_to_execute'"
             # cd $WORKSPACE
             # sudo python3 -m pytest -v -s $test_cmd $tests_to_execute
-            ssh -tt intel@localhost "cd $WORKSPACE; gramine_commit=$gramine_commit \
+            ssh -tt $USER@localhost "cd $WORKSPACE; gramine_commit=$gramine_commit \
                 gsc_repo=$gsc_repo gsc_commit=$gsc_commit \
                 contrib_repo=$contrib_repo contrib_branch=$contrib_branch \
                 python3 -m pytest -v -s $test_cmd '$tests_to_execute' --junit-xml=result.xml"

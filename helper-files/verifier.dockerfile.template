@@ -1,6 +1,11 @@
-FROM ubuntu:18.04
+# SPDX-License-Identifier: LGPL-3.0-or-later
+# Copyright (C) 2022 Intel Corporation
 
-RUN apt-get update \
+FROM ubuntu:22.04
+
+RUN echo "deb http://security.ubuntu.com/ubuntu focal-security main" | tee /etc/apt/sources.list.d/focal-security.list
+
+RUN env DEBIAN_FRONTEND=noninteractive apt-get update \
     && env DEBIAN_FRONTEND=noninteractive apt-get install -y \
     build-essential \
     curl \
@@ -16,6 +21,7 @@ RUN apt-get update \
     python3-click \
     python3-jinja2 \
     python3-pyelftools \
+    libssl1.1 \
     libunwind8 \
     musl-tools \
     python3-pytest \
@@ -32,16 +38,24 @@ RUN python3 -m pip install -U \
     'tomli>=1.1.0' \
     'tomli-w>=0.4.0'
 
-RUN wget https://packages.microsoft.com/ubuntu/18.04/prod/pool/main/a/az-dcap-client/az-dcap-client_1.10_amd64.deb \
- && dpkg -i az-dcap-client_1.10_amd64.deb
+COPY keys/* /usr/share/keyrings/
 
-RUN echo 'deb [arch=amd64] https://download.01.org/intel-sgx/sgx_repo/ubuntu bionic main' \
-    > /etc/apt/sources.list.d/intel-sgx.list \
-    && wget https://download.01.org/intel-sgx/sgx_repo/ubuntu/intel-sgx-deb.key \
-    && apt-key add intel-sgx-deb.key
+# Installing Azure DCAP Quote Provider Library (az-dcap-client).
+# Here, the version of az-dcap-client should be in sync with the az-dcap-client
+# version used for quote generation. User can replace the below package with the
+# latest package.
+RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft.asc] https://packages.microsoft.com/ubuntu/20.04/prod focal main" \
+    | tee /etc/apt/sources.list.d/msprod.list
 
-RUN apt-get update
-RUN apt-get install -y libsgx-dcap-quote-verify-dev
+RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-sgx-deb.asc] https://download.01.org/intel-sgx/sgx_repo/ubuntu jammy main" \
+    | tee /etc/apt/sources.list.d/intel-sgx.list
+
+RUN env DEBIAN_FRONTEND=noninteractive apt-get update \
+    && env DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    az-dcap-client
+
+RUN env DEBIAN_FRONTEND=noninteractive apt-get update \
+    && env DEBIAN_FRONTEND=noninteractive apt-get install -y libsgx-dcap-quote-verify-dev
 
 RUN git clone --depth 1 --branch v1.3.1 https://github.com/gramineproject/gramine.git
 
@@ -55,8 +69,6 @@ RUN cd gramine/ && meson setup build/ --buildtype=release -Ddirect=enabled -Dsgx
 
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
-
-RUN gramine-sgx-gen-private-key
 
 ARG server_dcap_pf="n"
 RUN if [ $server_dcap_pf="y" ]; then \

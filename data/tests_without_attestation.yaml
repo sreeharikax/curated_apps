@@ -188,7 +188,8 @@ test_redis_docker_flags:
 
 test_redis_docker_invalid_flag_string:
   docker_image: redis redis:latest
-  expected_screen: encrypted_files_path
+  end_test: encrypted_files_path
+  expected_screen: encryption_key_page
   docker_flags: "--name docker_container, --net=host"
   expected_output_console: 'Invalid string specified'
   distro: 4

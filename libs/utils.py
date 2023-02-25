@@ -73,7 +73,8 @@ def cleanup_after_test(test_config_dict):
         run_subprocess(f"docker rmi gsc-{docker_image} -f")
         if test_config_dict.get("create_local_image") == "y":
             run_subprocess(f"docker rmi {docker_image} -f >/dev/null 2>&1")
-        run_subprocess("docker rm $(docker ps -a -f status=exited -f status=created -q)")
+        if run_subprocess("docker ps -a -f status=exited -f status=created -q"):
+            run_subprocess("docker rm $(docker ps -a -f status=exited -f status=created -q)")
     except Exception as e:
         print("Exception occured during cleanup ", e)
 

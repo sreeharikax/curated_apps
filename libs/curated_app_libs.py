@@ -142,6 +142,7 @@ def expected_msg_verification(test_config_dict, curation_output):
         docker_commands = get_docker_run_command(test_config_dict, curation_output)
         for cmd in docker_commands:
             if test_config_dict["flag_validation"] in cmd:
+                print(cmd)
                 result = True
         return result
     return None

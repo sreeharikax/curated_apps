@@ -14,7 +14,6 @@ class TestClass:
         test_result = libs.curated_app_libs.run_test(self, tests_yaml_path)
         assert test_result
 
-    @pytest.mark.sanity
     @pytest.mark.jenkins
     @pytest.mark.redis
     @pytest.mark.redis_attestation
@@ -158,6 +157,7 @@ class TestClass:
         test_result = libs.curated_app_libs.run_test(self, tests_yaml_path)
         assert test_result
 
+    @pytest.mark.sanity
     @pytest.mark.jenkins
     @pytest.mark.tfserving
     @pytest.mark.tfserving_attestation
@@ -165,7 +165,6 @@ class TestClass:
         test_result = libs.curated_app_libs.run_test(self, tests_yaml_path)
         assert test_result
 
-    @pytest.mark.jenkins
     @pytest.mark.pytorch
     @pytest.mark.pytorch_attestation
     def test_pytorch_default_with_debug(self):

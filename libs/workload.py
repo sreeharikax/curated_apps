@@ -45,6 +45,9 @@ def run_tensorflow_serving_client(test_config_dict):
 def run_mysql_client():
     result = False
     install_my_sql_client = utils.run_subprocess(MYSQL_CLIENT_INSTALL_CMD)
+    if os.path.isfile(MYSQL_INPUT_FILE):
+        utils.run_subprocess(f"rm -rf {MYSQL_INPUT_FILE}")
+    utils.run_subprocess(MYSQL_INPUT_TXT)
     mysql_output = utils.run_subprocess(MYSQL_CLIENT_CMD)
     print(mysql_output)
     if re.findall(r"^User(?s:.*?)^root*", mysql_output, re.M):

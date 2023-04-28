@@ -68,7 +68,9 @@ CLEANUP_ENCRYPTED_DB   = f"sudo rm -rf /var/run/test_db_encrypted"
 MYSQL_ENCRYPT_DB_CMD         = f"sudo gramine-sgx-pf-crypt encrypt -w workloads/mysql/base_image_helper/encryption_key \
                             -i workloads/mysql/test_db -o /var/run/test_db_encrypted"
 MYSQL_CLIENT_INSTALL_CMD = f"sudo apt-get -y install mysql-client"
-MYSQL_CLIENT_CMD       = f"printf 'SELECT User FROM mysql.user;\nexit' > input.txt | mysql -h 127.0.0.1 -uroot < input.txt"
+MYSQL_INPUT_FILE       = "input.txt"
+MYSQL_INPUT_TXT        = f"echo \"SELECT User FROM mysql.user;\\nexit\" >> {MYSQL_INPUT_FILE}"
+MYSQL_CLIENT_CMD       = f"mysql -h 127.0.0.1 -uroot < {MYSQL_INPUT_FILE}"
 
 MARIADB_TESTDB_PATH      = os.path.join(CURATED_APPS_PATH, "workloads/mariadb/test_db")
 MARIADB_INIT_FOLDER_PATH = os.path.join(MARIADB_TESTDB_PATH, "mariadb")

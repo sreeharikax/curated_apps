@@ -202,7 +202,7 @@ test_pytorch_test_option:
 test_pytorch_default:
   docker_image: pytorch pytorch-encrypted:latest
   create_local_image: y
-  distro: 1
+  distro: 2
   encryption_key: workloads/pytorch/base_image_helper/encryption_key
   encrypted_files_path: classes.txt:input.jpg:alexnet-pretrained.pt:result.txt
 

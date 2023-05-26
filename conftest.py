@@ -8,7 +8,7 @@ def curated_setup():
     print_env_variables()
     utils.run_subprocess(f"rm -rf {LOGS}")
     os.mkdir(LOGS)
-    utils.run_subprocess("docker system prune -f")
+    utils.run_subprocess("docker system prune -f --all")
     utils.stop_docker_process("server_dcap")
     print("Cleaning old contrib repo")
     utils.run_subprocess("rm -rf {}".format(ORIG_CURATED_PATH))
@@ -85,5 +85,5 @@ def update_gsc(gsc_commit='', gsc_repo=''):
 @pytest.fixture(scope="class", autouse=True)
 def teardown():
     yield
-    utils.run_subprocess("docker system prune -f")
+    utils.run_subprocess("docker system prune -f --all")
 

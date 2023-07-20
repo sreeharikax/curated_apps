@@ -34,7 +34,7 @@ RUN env DEBIAN_FRONTEND=noninteractive apt-get update \
     pkg-config
 
 RUN python3 -m pip install -U \
-    'meson>=0.56' \
+    'meson>=0.56,!=1.2.*' \
     'tomli>=1.1.0' \
     'tomli-w>=0.4.0'
 

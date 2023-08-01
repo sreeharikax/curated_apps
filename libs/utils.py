@@ -138,10 +138,10 @@ def init_db(workload_name):
             if process.poll() is not None and output == '':
                 if "ovms" in workload_name:
                     time.sleep(30)
-                    if os.path.exists(os.path.join(CURATED_APPS_PATH, \
-                        "workloads/openvino-model-server/test_model/1/face-detection-retail-0004.bin")) and \
-                        os.path.exists(os.path.join(CURATED_APPS_PATH, \
-                        "workloads/openvino-model-server/test_model/1/face-detection-retail-0004.xml")):
+                    if os.path.exists(os.path.join(CURATED_APPS_PATH, OVMS_TESTDB_PATH, \
+                        "1/face-detection-retail-0004.bin")) and \
+                        os.path.exists(os.path.join(CURATED_APPS_PATH, OVMS_TESTDB_PATH, \
+                        "1/face-detection-retail-0004.xml")):
                         print(f"{workload_name.upper()} DB is initialized\n")
                         init_result = True
                         break
@@ -172,7 +172,10 @@ def init_db(workload_name):
 def encrypt_db(workload_name):
     if (workload_name in ["mariadb", "ovms"]):
         run_subprocess(DB_MOUNT + eval(workload_name.upper()+"_ENC_PATH"), CURATED_APPS_PATH)
-    enc_key_path = "workloads/" + workload_name + "/base_image_helper/encryption_key"
+    if (workload_name == "ovms"):
+        enc_key_path = "workloads/" + OVMS + "/base_image_helper/encryption_key"
+    else:
+        enc_key_path = "workloads/" + workload_name + "/base_image_helper/encryption_key"
     enc_key = "dd if=/dev/urandom bs=16 count=1 > " + enc_key_path
     encrypt_db_cmd = "gramine-sgx-pf-crypt encrypt -w " + enc_key_path + " -i " + \
                         eval(workload_name.upper()+"_TESTDB_PATH") + " -o " + \

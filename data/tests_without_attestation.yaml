@@ -265,7 +265,7 @@ test_memcached_default_with_debug:
   debug_mode: y
 
 test_ovms_default:
-  docker_image: openvino-model-server openvino/model_server
+  docker_image: openvino-model-server openvino/model_server:2023.0
   runtime_args_text: --model_path /mnt/tmpfs/model_encrypted --model_name face-detection --port 9000 --shape auto
   docker_flags: -u 0:0 -p 9000:9000 -v /mnt/tmpfs/model_encrypted:/mnt/tmpfs/model_encrypted
   encryption_key: workloads/openvino-model-server/base_image_helper/encryption_key
@@ -273,7 +273,7 @@ test_ovms_default:
   pre_workload_setup: y
 
 test_ovms_with_test_sign_key:
-  docker_image: openvino-model-server openvino/model_server
+  docker_image: openvino-model-server openvino/model_server:2023.0
   runtime_args_text: --model_path /mnt/tmpfs/model_encrypted --model_name face-detection --port 9000 --shape auto
   docker_flags: -u 0:0 -p 9000:9000 -v /mnt/tmpfs/model_encrypted:/mnt/tmpfs/model_encrypted
   encryption_key: workloads/openvino-model-server/base_image_helper/encryption_key
@@ -282,7 +282,7 @@ test_ovms_with_test_sign_key:
   signing_key_path : test
 
 test_ovms_with_test_sign_key_debug:
-  docker_image: openvino-model-server openvino/model_server
+  docker_image: openvino-model-server openvino/model_server:2023.0
   runtime_args_text: --model_path /mnt/tmpfs/model_encrypted --model_name face-detection --port 9000 --shape auto
   docker_flags: -u 0:0 -p 9000:9000 -v /mnt/tmpfs/model_encrypted:/mnt/tmpfs/model_encrypted
   encryption_key: workloads/openvino-model-server/base_image_helper/encryption_key
@@ -292,7 +292,7 @@ test_ovms_with_test_sign_key_debug:
   debug_mode: y
 
 test_ovms_with_test_option:
-  docker_image: openvino-model-server openvino/model_server
+  docker_image: openvino-model-server openvino/model_server:2023.0
   runtime_args_text: --model_path /mnt/tmpfs/model_encrypted --model_name face-detection --port 9000 --shape auto
   docker_flags: -u 0:0 -p 9000:9000 -v /mnt/tmpfs/model_encrypted:/mnt/tmpfs/model_encrypted
   encryption_key: workloads/openvino-model-server/base_image_helper/encryption_key
@@ -301,7 +301,7 @@ test_ovms_with_test_option:
   test_option: y
 
 test_ovms_default_with_debug:
-  docker_image: openvino-model-server openvino/model_server
+  docker_image: openvino-model-server openvino/model_server:2023.0
   runtime_args_text: --model_path /mnt/tmpfs/model_encrypted --model_name face-detection --port 9000 --shape auto
   docker_flags: -u 0:0 -p 9000:9000 -v /mnt/tmpfs/model_encrypted:/mnt/tmpfs/model_encrypted
   encryption_key: workloads/openvino-model-server/base_image_helper/encryption_key

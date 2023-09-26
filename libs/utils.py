@@ -254,8 +254,8 @@ def check_app_version(test_config_dict):
     app_image = test_config_dict['docker_image'].split(" ")[1]
     app_name = test_config_dict['docker_image'].split(" ")[0]
     if app_name == "openvino-model-server":
-        version_string = run_subprocess(f"docker inspect {app_image} | grep DRIVER_VERSION")
-        version = '.'.join(re.findall(r'\d+', version_string))
+        version_string = run_subprocess(f"docker run {app_image} --version | grep 'OpenVINO Model Server'")
+        version = version_string.split("OpenVINO Model Server ")[1]
     elif app_name == "sklearn":
         app_image = "intel/intel-optimized-ml:latest"
         version_string = run_subprocess(f"docker inspect {app_image} | grep intel/intel-optimized-ml@sha256:")

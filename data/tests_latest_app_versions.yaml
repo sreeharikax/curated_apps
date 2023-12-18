@@ -14,7 +14,7 @@ test_redis_latest_with_attestation:
   docker_image: redis redis:latest
 
 test_mysql_latest_with_attestation:
-  docker_image: mysql mysql:debian
+  docker_image: mysql mysql:8.0-debian
   runtime_args_text: --datadir /var/run/test_db_encrypted
   docker_flags: -v /var/run/test_db_encrypted:/var/run/test_db_encrypted
   encryption_key: workloads/mysql/base_image_helper/encryption_key

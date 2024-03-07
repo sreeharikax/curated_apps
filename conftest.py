@@ -53,7 +53,7 @@ def copy_repo():
 
 def update_gramine_branch(commit):
     commit_str = f" && cd gramine && git checkout {commit} && cd .."
-    copy_cmd = "cp config.yaml.template config.yaml"
+    copy_cmd = "cp -f config.yaml.template config.yaml"
     if not "v1" in commit:
         utils.run_subprocess(f"cp -rf helper-files/{VERIFIER_TEMPLATE} {VERIFIER_DOCKERFILE}")
     utils.update_file_contents(copy_cmd, copy_cmd + "\nsed -i 's|Branch:.*master|Branch: \"{}|' config.yaml".format(commit), CURATION_SCRIPT)

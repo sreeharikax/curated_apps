@@ -23,7 +23,10 @@ node("$nodeLabel") {
     } catch (Exception e){
         currentBuild.result = "FAILURE"
     } finally {
-        test_executor.storeartifacts()
-        test_executor.cleanup()
+        try {
+            test_executor.storeartifacts()
+        } finally {
+            test_executor.cleanup()
+        }
     }
 }

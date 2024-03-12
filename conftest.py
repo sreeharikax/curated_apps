@@ -54,9 +54,11 @@ def copy_repo():
 def update_gramine_branch(commit):
     commit_str = f" && cd gramine && git checkout {commit} && cd .."
     copy_cmd = "cp -f config.yaml.template config.yaml"
+    gsc_tag = utils.run_subprocess(f"git ls-remote --sort='version:refname' --tags  {GSC_REPO} | tail --lines=1 | cut --delimiter=\"/\" --fields=3")
     if not "v1" in commit:
         utils.run_subprocess(f"cp -rf helper-files/{VERIFIER_TEMPLATE} {VERIFIER_DOCKERFILE}")
-    utils.update_file_contents(copy_cmd, copy_cmd + "\nsed -i 's|Branch:.*master|Branch: \"{}|' config.yaml".format(commit), CURATION_SCRIPT)
+    sed_string = "sed -i \"s/Branch.*master.*\\|Branch.*{}.*/Branch: '{}'/\" config.yaml".format(gsc_tag, commit.replace('/', '\\/'))
+    utils.update_file_contents(copy_cmd, (copy_cmd + "\n" + sed_string), CURATION_SCRIPT)
     utils.update_file_contents(GRAMINE_CLONE, GRAMINE_CLONE.replace(GRAMINE_DEPTH_STR, "") + commit_str,
             VERIFIER_DOCKERFILE)
     utils.update_file_contents(GRAMINE_CLONE, GRAMINE_CLONE.replace(GRAMINE_DEPTH_STR, "") + commit_str,
@@ -77,3 +79,8 @@ def teardown():
     yield
     utils.run_subprocess("docker system prune -f --all")
 
+@pytest.fixture(scope="session", autouse=True)
+def test_gramine_gsc_version():
+    yield
+    test_result = utils.verify_build_env_details()
+    assert test_result

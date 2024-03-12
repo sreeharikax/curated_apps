@@ -6,6 +6,7 @@ import psutil
 import libs.config_parser as config_parser
 from data.constants import *
 import re
+import yaml
 
 def run_subprocess(command, dest_dir=None):
     if dest_dir:
@@ -280,3 +281,32 @@ def check_app_version(test_config_dict):
     else:
         print("App version has upgraded to a newer version")
         return False
+
+def verify_build_env_details():
+    result = False
+    out = []
+    if os.environ["gramine_commit"] or os.environ["gsc_repo"] or os.environ["gsc_commit"]:
+        print("\n\n############################################################################")
+        os.chdir(os.path.join(CURATED_APPS_PATH, "gsc"))
+        if os.environ["gramine_commit"]:
+            fd = open("config.yaml", mode="r")
+            fd_data = yaml.safe_load(fd.read())
+            c_gramine_repo = fd_data["Gramine"]["Repository"]
+            c_gramine_commit = fd_data["Gramine"]["Branch"]
+            out.append(os.environ["gramine_commit"] == c_gramine_commit)
+            print("\nGramine Repo: ", c_gramine_repo)
+            print("Gramine Commit: ", c_gramine_commit)
+        if os.environ["gsc_repo"]:
+            c_gsc_url = run_subprocess("git config --get remote.origin.url")
+            out.append(os.environ["gsc_repo"] == c_gsc_url)
+            print("\nGSC Repo: ", c_gsc_url)
+        if os.environ["gsc_commit"]:
+            c_gsc_commit = run_subprocess("git branch --show-current")
+            out.append(os.environ["gsc_commit"] == c_gsc_commit)
+            print("\nGSC Commit: ", c_gsc_commit)
+        print("\n\n############################################################################")
+        result = all(out)
+    else:
+        print("No environment variable specified")
+        result = True
+    return result

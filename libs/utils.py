@@ -266,6 +266,7 @@ def check_app_version(test_config_dict):
         version = version_string.split("OpenVINO Model Server ")[1]
     elif app_name == "sklearn":
         app_image = "intel/intel-optimized-ml:latest"
+        run_subprocess(f"docker pull {app_image}")
         version_string = run_subprocess(f"docker inspect {app_image} | grep intel/intel-optimized-ml@sha256:")
         version = version_string.split(":")[1].strip('"')
     elif app_name == "mariadb":
@@ -275,7 +276,6 @@ def check_app_version(test_config_dict):
         version_string = run_subprocess(f"docker inspect {app_image} | grep -m 1 {app_name.upper()}_VERSION")
         version = version_string.split("=")[1].strip('"')
     elif app_name == "pytorch":
-        app_image = "pytorch/pytorch:latest"
         version_string = run_subprocess(f"docker inspect {app_image} | grep {app_name.upper()}_VERSION")
         version = version_string.split("=")[1].strip('"')
     print(f"App name {app_name} Version is {version}")

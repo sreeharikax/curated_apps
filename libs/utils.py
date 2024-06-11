@@ -249,7 +249,11 @@ def update_file_contents(old_contents, new_contents, filename, append=False):
     fd.close()
 
 def check_and_install_gramine():
-    gramine_path = run_subprocess("which gramine-sgx")
+    gramine_path = None
+    try:
+        gramine_path = run_subprocess("which gramine-sgx")
+    except Exception as e:
+        pass
     if not gramine_path:
         run_subprocess("sudo curl -fsSLo /usr/share/keyrings/gramine-keyring.gpg https://packages.gramineproject.io/gramine-keyring.gpg")
         run_subprocess('echo "deb [arch=amd64 signed-by=/usr/share/keyrings/gramine-keyring.gpg] https://packages.gramineproject.io/ $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/gramine.list')

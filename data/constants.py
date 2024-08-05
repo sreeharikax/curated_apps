@@ -82,7 +82,7 @@ OVMS_ENC_PATH               = "/mnt/tmpfs/model_encrypted"
 OVMS_INIT_DB_CMD            = f"curl --create-dirs https://storage.openvinotoolkit.org/repositories/open_model_zoo/2023.0/models_bin/1/face-detection-retail-0004/FP32/face-detection-retail-0004.xml https://storage.openvinotoolkit.org/repositories/open_model_zoo/2023.0/models_bin/1/face-detection-retail-0004/FP32/face-detection-retail-0004.bin \
                          -o {OVMS_TESTDB_PATH}/1/face-detection-retail-0004.xml -o {OVMS_TESTDB_PATH}/1/face-detection-retail-0004.bin"
 OVMS                        = "openvino-model-server"
-BASELINE_APP_VERSION        = {"redis": "7.0.11", "mysql": "8.0.36-1debian11", "mariadb": "11.3.2", "openvino-model-server": "2024.2.941f9ebd5", \
+BASELINE_APP_VERSION        = {"redis": "7.0.11", "mysql": "8.0.36-1debian11", "mariadb": "11.3.2", "openvino-model-server": "2024.3.0e33a366b", \
                                "pytorch": "2.2.1", "sklearn": "4144d24ab6852c41a926d279ab673f6259294bccbba2b834b96c681a62f2b865",
                                "memcached": "1.6.14"}
 PYTORCH_UPDATE_APP_VERSION  = f"sed -i 's\\2.0.1-cuda11.7-cudnn8-runtime\\latest\\g' Dockerfile"

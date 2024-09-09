@@ -69,8 +69,8 @@ def update_gsc(gsc_commit='', gsc_repo=''):
 @pytest.fixture(scope="class", autouse=True)
 def teardown():
     yield
-    utils.run_subprocess("docker system prune -f --all")
-    utils.run_subprocess("sudo apt remove gramine -y", timeout=60)
+    utils.execute_cmd("docker system prune -f --all", timeout=300)
+    utils.execute_cmd("sudo apt remove gramine -y", timeout=60)
 
 @pytest.fixture(scope="session", autouse=True)
 def test_gramine_gsc_version():

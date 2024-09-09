@@ -26,6 +26,19 @@ def run_subprocess(command, dest_dir=None, timeout=None):
     
     return process.stdout.strip()
 
+def execute_cmd(command, dest_dir=None, timeout=None):
+    try:
+        if dest_dir:
+            os.chdir(dest_dir)
+
+        print("Starting Process %s from %s" %(command, os.getcwd()))
+        process = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                    universal_newlines=True, shell=True, timeout=timeout)
+        if dest_dir: os.chdir(FRAMEWORK_PATH)
+    except subprocess.TimeoutExpired:
+        pass
+
+
 def popen_subprocess(command, dest_dir=None):
     if dest_dir:
         os.chdir(dest_dir)

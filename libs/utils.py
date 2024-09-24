@@ -229,12 +229,39 @@ def execute_pre_workload_setup(test_config_dict):
     if workload_name in ["mysql", "mariadb", "openvino-model-server"]:
         if workload_name == "openvino-model-server":
             workload_name = "ovms"
+            port_pid_cmd = "$(sudo lsof -t -i:8500)"
+            port_pid_cmd = run_subprocess(f"{port_pid_cmd}")
+            print("***********************{}".format(port_pid_cmd))
+            if port_pid_cmd:
+                print("Killing {}".format(port_pid_cmd))
+                run_subprocess(f"kill -9 {port_pid_cmd}")
         init_cmd = eval(workload_name.upper()+"_INIT_DB_CMD")
         if workload_name == "mysql" and docker_image not in init_cmd:
+            print("*********************** inside if")
+            port_pid_cmd = "$(sudo lsof -t -i:33060)"
+            port_pid_cmd = run_subprocess(f"{port_pid_cmd}")
+            print("***********************{}".format(port_pid_cmd))
+            if port_pid_cmd:
+                print("Killing {}".format(port_pid_cmd))
+                run_subprocess(f"kill -9 {port_pid_cmd}")
             init_cmd = init_cmd.replace(MYSQL_CURR_VERSION, docker_image)
         elif workload_name == "mariadb" and docker_image not in init_cmd:
+            port_pid_cmd = "$(sudo lsof -t -i:33060)"
+            port_pid_cmd = run_subprocess(f"{port_pid_cmd}")
+            print("***********************{}".format(port_pid_cmd))
+            if port_pid_cmd:
+                print("Killing {}".format(port_pid_cmd))
+                run_subprocess(f"kill -9 {port_pid_cmd}")
             init_cmd = init_cmd.replace(MARIADB_CURR_VERSION, docker_image)
         init_result = init_db(workload_name, init_cmd)
+        if workload_name == "mysql":
+            print("*********************** inside if")
+            port_pid_cmd = "$(sudo lsof -t -i:33060)"
+            port_pid_cmd = run_subprocess(f"{port_pid_cmd}")
+            print("***********************{}".format(port_pid_cmd))
+            if port_pid_cmd:
+                print("Killing {}".format(port_pid_cmd))
+                run_subprocess(f"kill -9 {port_pid_cmd}")
         if init_result == False:
             sys.exit("DB initialization failed")
         encrypt_db(workload_name)

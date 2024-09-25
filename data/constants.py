@@ -57,7 +57,7 @@ MYSQL_INIT_DB_CMD           = f"docker run --rm --net=host --name init_test_db -
                             -e MYSQL_ALLOW_EMPTY_PASSWORD=true -e MYSQL_DATABASE=test_db mysql:8.0.35-debian \
                             --datadir /test_db"
 STOP_TEST_DB_CMD            = "docker stop init_test_db"
-VENV_PACKAGE                = "python3.8-venv"
+VENV_PACKAGE                = "python3-venv"
 MYSQL_CLIENT                = "mysql-client"
 APT_INSTALL                 = "sudo apt-get install -y "
 GRAMINE                     = "gramine"
@@ -82,7 +82,7 @@ OVMS_ENC_PATH               = "/mnt/tmpfs/model_encrypted"
 OVMS_INIT_DB_CMD            = f"curl --create-dirs https://storage.openvinotoolkit.org/repositories/open_model_zoo/2023.0/models_bin/1/face-detection-retail-0004/FP32/face-detection-retail-0004.xml https://storage.openvinotoolkit.org/repositories/open_model_zoo/2023.0/models_bin/1/face-detection-retail-0004/FP32/face-detection-retail-0004.bin \
                          -o {OVMS_TESTDB_PATH}/1/face-detection-retail-0004.xml -o {OVMS_TESTDB_PATH}/1/face-detection-retail-0004.bin"
 OVMS                        = "openvino-model-server"
-BASELINE_APP_VERSION        = {"redis": "7.0.11", "mysql": "8.0.36-1debian11", "mariadb": "11.3.2", "openvino-model-server": "2024.3.0e33a366b", \
+BASELINE_APP_VERSION        = {"redis": "7.0.11", "mysql": "8.0.36-1debian11", "mariadb": "11.3.2", "openvino-model-server": "2024.4.28219825c", \
                                "pytorch": "2.2.1", "sklearn": "c0647ca260ebca3acf34b944ce1ea944522382901d1a8a0841af4799366bb326",
                                "memcached": "1.6.14"}
 PYTORCH_UPDATE_APP_VERSION  = f"sed -i 's\\2.0.1-cuda11.7-cudnn8-runtime\\latest\\g' Dockerfile"

@@ -22,6 +22,7 @@ pal.map
 
 # Ignore all text files
 *.txt
+!client_requirements.txt
 
 # object file/libraries
 *.a

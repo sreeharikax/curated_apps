@@ -152,6 +152,7 @@ class TestClass:
         test_result = libs.curated_app_libs.run_test(self, tests_yaml_path)
         assert test_result"""
 
+    @pytest.mark.sanity
     @pytest.mark.jenkins
     @pytest.mark.pytorch
     @pytest.mark.pytorch_attestation

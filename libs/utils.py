@@ -8,7 +8,7 @@ from data.constants import *
 import re
 import yaml
 
-def run_subprocess(command, dest_dir=None, timeout=None):
+def run_subprocess(command, dest_dir=None, timeout=1200):
     if dest_dir:
         os.chdir(dest_dir)
 

@@ -2,6 +2,7 @@ import pytest
 import os
 from data.constants import *
 from libs import utils
+import re
 
 @pytest.fixture(scope="session", autouse=True)
 def curated_setup():
@@ -74,13 +75,16 @@ def test_gramine_gsc_version():
     test_result = utils.verify_build_env_details()
     assert test_result
 
+@pytest.fixture(scope="function", autouse=True)
 def cleanup_ports(ports=None):
     if ports == None:
         ports = [MYSQL_PORT, MARIADB_PORT, OVMS_PORT, TFSERVING_PORT]
     for port in ports:
         try:
-            pid = utils.run_subprocess(f"sudo lsof -P -i:{port}")
-            utils.kill(pid)
+            out = utils.run_subprocess(f"sudo lsof -P -i:{port}")
+            if out:
+                proc_pid = re.sub("\s+", " ", out.split("\n")[1]).split(" ")[1]
+                utils.kill(int(proc_pid))
         except:
             pass
 
@@ -90,4 +94,3 @@ def cleanup():
     utils.stop_docker_process("server_dcap")
     print("Cleaning old contrib repo")
     utils.run_subprocess("rm -rf {}".format(ORIG_CURATED_PATH))
-    cleanup_ports()

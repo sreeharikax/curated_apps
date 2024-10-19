@@ -83,7 +83,7 @@ OVMS_INIT_DB_CMD            = f"curl --create-dirs https://storage.openvinotoolk
                          -o {OVMS_TESTDB_PATH}/1/face-detection-retail-0004.xml -o {OVMS_TESTDB_PATH}/1/face-detection-retail-0004.bin"
 OVMS                        = "openvino-model-server"
 BASELINE_APP_VERSION        = {"redis": "7.0.11", "mysql": "8.0.36-1debian11", "mariadb": "11.3.2", "openvino-model-server": "2024.4.28219825c", \
-                               "pytorch": "2.2.1", "sklearn": "7b51f01f69f6568c2f09c471adaf741672b98d5d9024cee2b4077dfd1d55e36d",
+                               "pytorch": "2.2.1", "sklearn": "8ec0c4a825111e4c8c5d9a5b72d56919df857bee1cb076698f727d561da38982",
                                "memcached": "1.6.14"}
 PYTORCH_UPDATE_APP_VERSION  = f"sed -i 's\\2.0.1-cuda11.7-cudnn8-runtime\\latest\\g' Dockerfile"
 SKLEARN_UPDATE_APP_VERSION  = f"sed -i 's\\scikit-learn-2023.1.1-xgboost-1.7.5-pip-base\\latest\\g' Dockerfile"

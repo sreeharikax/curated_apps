@@ -85,7 +85,7 @@ OVMS                        = "openvino-model-server"
 BASELINE_APP_VERSION        = {"redis": "7.0.11", "mysql": "8.0.36-1debian11", "mariadb": "11.3.2", "openvino-model-server": "2024.4.28219825c", \
                                "pytorch": "2.2.1", "sklearn": "8ec0c4a825111e4c8c5d9a5b72d56919df857bee1cb076698f727d561da38982",
                                "memcached": "1.6.14"}
-PYTORCH_UPDATE_APP_VERSION  = f"sed -i 's\\2.0.1-cuda11.7-cudnn8-runtime\\latest\\g' Dockerfile"
+PYTORCH_UPDATE_APP_VERSION  = f"sed -i 's\\2.0.1-cuda11.7-cudnn8-runtime\\pytorch:2.5.1-cuda12.4-cudnn9-devel\\g' Dockerfile"
 SKLEARN_UPDATE_APP_VERSION  = f"sed -i 's\\scikit-learn-2023.1.1-xgboost-1.7.5-pip-base\\latest\\g' Dockerfile"
 MYSQL_PORT                  = 3306
 MARIADB_PORT                = 3306
